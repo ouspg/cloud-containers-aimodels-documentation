@@ -1,0 +1,15 @@
+# Web API
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# LLM + RAG stack
+transformers>=4.43.0
+accelerate>=0.33.0
+torch>=2.2.0  # match your CUDA version if using GPU
+llama-index>=0.11.5
+llama-index-embeddings-huggingface>=0.3.0
+
+# Optional GPU/quantization extras (guarded by availability)
+bitsandbytes>=0.43.0 ; platform_system == "Linux"
+peft>=0.11.0
+optimum>=1.21.0

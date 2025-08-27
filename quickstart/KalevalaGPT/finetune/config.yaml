@@ -1,0 +1,36 @@
+project_id: "project_2014746"
+scratch_dir: "/scratch/project_2014746"
+
+# Dataset settings
+train_dataset: "nraesalmi/kalevala-dataset"
+eval_dataset: "nraesalmi/kalevala-validation-dataset"
+
+# Model settings
+base_model_id: "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+output_model_name: "tinyllama-kalevala"
+merge_checkpoint: "tinyllama-kalevala/checkpoint-110"
+merged_output_dir: "tinyllama-kalevala-merged"
+
+# LoRA config
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_bias: "none"
+lora_task_type: "CAUSAL_LM"
+
+# Training config
+per_device_train_batch_size: 8
+gradient_accumulation_steps: 4
+optim: "paged_adamw_32bit"
+learning_rate: 0.0002
+lr_scheduler_type: "cosine"
+save_strategy: "epoch"
+eval_strategy: "epoch"
+load_best_model_at_end: true
+metric_for_best_model: "eval_loss"
+greater_is_better: false
+logging_steps: 10
+num_train_epochs: 10
+fp16: true
+report_to: []
+save_total_limit: 2

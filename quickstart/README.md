@@ -10,14 +10,16 @@ Quickstart development with these examples and tips to build, containerize, and 
 1.  [Project layout and basic setup](#1-project-layout-and-basic-setup)
 
 2. [Model development and exporting](#2-model-development-and-exporting)
+ 
+3. [Implementing RAFT API](#3-implementing-raft-api)
 
-3. [Containerizing with Docker](#3-containerizing-with-docker)
+4. [Full-stack app development](#4-full-stack-app-development)
 
-4. [Pushing to container registries](#4-pushing-to-container-registries)
+5. [Containerizing the API with Docker](#5-containerizing-the-api-with-docker)
 
-5. [Deploying to Rahti or alternatives](#5-deploying-to-rahti-openshift-or-alternatives)
+6. [Deploying the full-stack to Rahti](#6-deploying-the-full-stack-to-rahti-openshift)
 
-6. [Next steps](#6-next-steps)
+7. [Next steps](#7-next-steps)
 
 </details>
 
@@ -384,8 +386,6 @@ As the .env file is dockerignored, we need to add it into the run statement:
 
     docker run -d -p 8000:8000 --env-file .env kalevalagpt-ai 
 
-### 5._: Pushing to container registries
-
 ## 6. Deploying the full-stack to Rahti (OpenShift)
 
 Deploying software from a GitHub repository to CSC Rahti
@@ -430,7 +430,7 @@ Remember to switch the frontend and backend urls from localhost to addresses fro
 
 > For more detailed instructions, visit https://docs.csc.fi/cloud/rahti/
 
-## 7. What next
+## 7. Next steps
 
 Frontend:
 

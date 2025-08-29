@@ -1,6 +1,6 @@
 # ⏳ Quickstart Guide 
 
-Quickstart development with these examples and tips to build, containerize, and deploy your own LLM service using best practices. This guide is designed to be generalizable to similar cloud/container/AI projects using the technologies.
+Quickstart development with these examples and tips to build, containerize, and deploy your own LLM service using best practices. This guide is designed to be generalizable to similar cloud/container/AI projects using the technologies. The sample project can be found from  [quickstart/KalevalaGPT](KalevalaGPT).
 
 <details>
 <summary>📁 Navigation</summary>
@@ -68,28 +68,29 @@ To support best practices with a clean and scalable workflow, the KalevalaGPT pr
     │   ├── graph_store.json
     │   ├── image__vector_store.json
     │   └── index_store.json
+    ├── test/                   # For unit testing
+    │   ├── __init__.py
+    │   ├── predict_test.py
+    │   └── rag_test.py
+    ├── .env                    # For storing secrets
+    ├── .gitignore
+    ├── .dockerignore
     ├── requirements.txt        # Python API dependencies
     └── Dockerfile              # Set up API + runtime
 
     app/                        # Full-stack app files and docker setup
     ├── frontend/               # React frontend
     │   ├── src/
-    │   ├── package.json
-    │   └──Dockerfile           # Frontend docker setup
+    │   ├── node_modules/
+    │   └── package.json
     ├── backend/                # Node.js backend
-    │   ├── server.js
+    │   ├── server.ts
+    │   ├── node_modules/
     │   ├── package.json
-    │   └── Dockerfile          # Backend docker setup
-    └── docker-compose.yml      # Set up full stack app compose containers
-
-    k8s/                        # Converted docker files as k8s manifests
-    ├── ai-model/               # AI service manifests
-    │   ├── deployment.yaml
-    │   └── service.yaml
-    └── app/                    # Frontend/backend manifests
-        ├── deployment.yaml
-        └── service.yaml
-
+    │   └── .env                # For storing secrets
+    ├── node_modules/
+    ├── package.json
+    └── .gitignore
 
     
 ## 2. Model development and exporting
@@ -303,24 +304,89 @@ Test the API with curl:
 
 Once everything works as expected, we are ready to move forward to the full-stack implementation.
 
-## 4. Full-stack app development 
+## 4. Full-stack app development
 
-## 5. Containerizing with Docker
-https://docs.docker.com/compose/
+Once the RAFT API is running and responding correctly, the next step is to build a full-stack application where the user communicates with the backend through the frontend which displays answers and allows user interaction. This section will guide you through implementing a **React** **TypeScript** frontend and a Node.js **TypeScript** backend. You can either use the one provided in the KalevalaGPT example, or follow the steps to create one yourself.
 
-`docker init` for quick setup
-## 6. Pushing to container registries
-https://www.docker.com/products/docker-hub/
+### 4.1: Initialize the project directories
 
-## 7. Deploying to Rahti (OpenShift) or alternatives
-https://docs.csc.fi/cloud/rahti/ext_docs/
+Create separate directories for the frontend and backend to separate logic and allow independent deployment:
 
-## 8. Best practices for portability and reusability
-https://dzone.com/articles/containerization-and-ai-streamlining-the-deploymen
-https://neptune.ai/blog/best-practices-docker-for-machine-learning
-https://github.com/ouspg/LLM-Hackathon
+    mkdir frontend backend
 
+### 4.2: Set up the frontend
 
+Go to the frontend directory and initialize a React + TypeScript project using Vite:
+
+    npm create vite@latest frontend     # Choose Framework: React, Variant: TypeScript
+    cd frontend
+    npm install
+
+You can test the React + TS app with
+
+    npm run dev
+
+And after that, you can clean up the example app files in /src and leave just `main.tsx` and `App.tsx`. 
+
+### 4.3: Understanding how the KalevalaGPT frontend works
+
+1. Message structure
+
+    - The `Message` interface defines each chat entry with universal fields (sender, text) and optional fields (`context`, `sources`) for bot responses and (`topK`, `similarityCutoff`) for user messages.
+
+2. Input & queries
+
+    - Users type their question in the input box and can adjust `top_k` and `similarity_cutoff` values before sending.
+
+    - The message is appended to `messages` list after sending, and a fetch request is sent to the backend with the question and parameters.
+
+3. UI updates
+
+    - `useState` tracks `messages` so that any new message triggers a UI update.
+    - `useRef` ensures the latest message scrolls into view automatically.
+
+### 4.4: Set up the backend for local development
+
+Initialize a Node.js project in the backend folder:
+
+    cd ../backend
+    npm init -y
+    npm install express cors axios dotenv ts-node-dev typescript @types/node @types/express
+
+We are using Axios as it simplifies the HTTP requests using promises and error handling. Express.js is used as the backend framework because it is lightweight and easy to expand on. CORS is enabled to allow the React frontend (which is running on a different port) to communicate with the API.
+
+### Test the full app
+
+Go to the main folder, and install concurrently to test run both the backend and frontend simultaneously with ease:
+
+    npm install concurrently
+
+Then add these to the main project folder's `package.json`:
+
+    {
+    "name": "kalevalagpt",
+    "private": true,
+    "scripts": {
+        "dev": "concurrently \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+    },
+    "dependencies": {
+        "concurrently": "^9.2.1"
+    }
+    }
+
+## 5. Containerizing the API with Docker
+
+Build the image with
+
+    docker build -t kalevalagpt-ai . 
+
+As the .env file is dockerignored, we need to add it into the run statement:
+
+    docker run -d -p 8000:8000 --env-file .env kalevalagpt-ai 
+
+### 5._: Pushing to container registries
+
+## 6. Deploying the full-stack to Rahti (OpenShift)
 
 Deploying software from a GitHub repository to CSC Rahti
 
@@ -341,21 +407,34 @@ CSC Rahti is a Platform-as-a-Service (PaaS) offering based on [Red Hat OpenShift
     - Go to the Rahti login page and log in
 
 2. Create a new project:
-    - In the OpenShift dashboard, click "Create Project". Give it a name and description
+    - In the OpenShift dashboard, click "Create Project". Give it a name and in the description, add the CSC project id in the format of `csc_project: 1000123`
 
 3. Import your app from Git:
-    - In your project, click “Add to Project” > “From Git”
+    - In your project, click “Add to Project” > “Import from Git”
 
     - Paste your GitHub repo URL (public or private with token access)
 
-    - Choose Builder Image (e.g. Python, Node.js, etc.) or your Dockerfile
+    - Click Show advanced Git options > add optional Git reference, Context Dir as frontend first, then do the same for backend, and add the Source Secret
 
-    - Configure environment variables if needed
+4. Choose Builder Image (e.g. Python, Node.js, etc.) or your Dockerfile, in this example, Node.js 20 is used
 
-4. Deploy and expose:
+5. Configure environment variables if needed, and for the frontend and backend make sure that the ports are set up correctly.
+
+6. Deploy and expose:
 
     - Click Create, and OpenShift will automatically build and deploy your app
 
     - Go to Routes and find the external URL for your app
 
+Remember to switch the frontend and backend urls from localhost to addresses from Rahti.
+
 > For more detailed instructions, visit https://docs.csc.fi/cloud/rahti/
+
+## 7. What next
+
+Frontend:
+
+- Learn how to use localStorage https://www.geeksforgeeks.org/javascript/javascript-localstorage/
+
+- Learn tailwind css https://tailwindcss.com/
+

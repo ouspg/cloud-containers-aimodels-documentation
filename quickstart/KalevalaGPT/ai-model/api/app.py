@@ -34,6 +34,12 @@ def _bool(name: str, default: bool) -> bool:
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
+API_KEY = os.environ.get("API_KEY")
+
+def check_api_key(req) -> bool:
+    """Check if request contains valid API key header."""
+    return req.headers.get("x-api-key") == API_KEY
+
 # Initialize heavy components
 _rag = RagService()
 _model = load_model()
@@ -41,6 +47,11 @@ _model = load_model()
 @app.get("/health")
 def health() -> Any:
     """Simple health check to verify the service is ready."""
+
+    # Security check
+    if not check_api_key(request):
+        return jsonify({"error": "Unauthorized"}), 401
+
     return jsonify(
         {
             "status": "ok",
@@ -72,6 +83,11 @@ def query() -> Any:
       "usage": {"top_k": 3, "similarity_cutoff": 0.5}
     }
     """
+
+    # Security check
+    if not check_api_key(request):
+        return jsonify({"error": "Unauthorized"}), 401
+
     payload: Dict[str, Any] = request.get_json(force=True, silent=False) or {}
     question = str(payload.get("question", "")).strip()
     if not question:

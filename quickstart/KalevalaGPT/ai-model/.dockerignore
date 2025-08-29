@@ -1,0 +1,17 @@
+# Ignore Python virtual environments
+.venv/
+__pycache__/
+
+# Ignore git and local config files
+.git
+.gitignore
+
+# Ignore tests
+test/
+*.swp
+
+# Ignore .env
+.env
+
+# Ignore other unnecessary files
+*.pyc

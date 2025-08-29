@@ -26,7 +26,7 @@ Useful free developer tools and services for containers, cloud, and AI+ML, avail
 
 ## ⏳ Quickstart Guide
 
-Quickstart development with these steps to build, containerize, and deploy your own AI model using best practices. This guide is designed to be generalizable to similar cloud/container/AI projects using the mentioned technologies.
+Quickstart development with these steps to build, containerize, and deploy your own AI model using best practices. This guide is designed to be generalizable to similar cloud/container/AI projects using the mentioned technologies. **full-stack RAFT example included!**
 
 - Project layout and basic setup
 - Model development and exporting
@@ -35,7 +35,7 @@ Quickstart development with these steps to build, containerize, and deploy your 
 - Deploying to Rahti (OpenShift) or alternatives
 - Best practices for portability and reusability
 
-> Jump to [`quickstart/README.md`](quickstart/README.md) to get started.
+> Jump to [`quickstart/`](quickstart/) to get started.
 
 ---
 

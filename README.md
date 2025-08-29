@@ -30,10 +30,11 @@ Quickstart development with these steps to build, containerize, and deploy your 
 
 - Project layout and basic setup
 - Model development and exporting
-- Containerizing with Docker
-- Pushing to container registries
-- Deploying to Rahti (OpenShift) or alternatives
-- Best practices for portability and reusability
+- Implementing RAFT API
+- Full-stack app development
+- Containerizing the API with Docker
+- Deploying the full-stack to Rahti (OpenShift)
+- Next steps
 
 > Jump to [`quickstart/`](quickstart/) to get started.
 

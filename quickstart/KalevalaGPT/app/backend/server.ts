@@ -10,43 +10,57 @@ dotenv.config();
 
 const API_KEY = process.env.API_KEY;
 
-app.post("/api/chat", async (req: { body: { question: any; top_k: any; similarity_cutoff: any; }; }, res: {
-    json: (arg0: {
-      answer: any; context: any; // optional, used by Show Info button
-      sources: any;
-    }) => void; status: (arg0: number) => { (): any; new(): any; json: { (arg0: { answer: string; }): void; new(): any; }; };
-  }) => {
+app.post("/api/chat", async (req, res) => {
   const { question, top_k, similarity_cutoff } = req.body;
 
   try {
-    // Send the message + optional parameters to the AI backend
-    const aiResponse = await axios.post("http://86.50.168.231:8000/query", {
-      question: question,
-      top_k: top_k,
-      similarity_cutoff: similarity_cutoff, 
-    },
-    {
-      headers: { "x-api-key": API_KEY }
-  });
+    const aiResponse = await axios.post(
+      "http://localhost:8000/query",
+      {
+        question: question,
+        top_k: top_k,
+        similarity_cutoff: similarity_cutoff,
+      },
+      {
+        headers: { "x-api-key": API_KEY }
+      }
+    );
 
-  // Extract only the assistant's answer
-  let { answer, context, sources } = aiResponse.data;
+    let { answer, context, sources } = aiResponse.data;
 
-  if (answer) {
-    const splitAnswer = answer.split("<|assistant|>");
-    if (splitAnswer.length > 1) {
-      answer = splitAnswer[1].trim();  // take everything after <|assistant|>
-      answer = answer.replaceAll("</s>", "").trim()
-    } else {
-      answer = answer = answer.replaceAll("</s>", "").trim(); // fallback if tag not found
+    if (answer) {
+      // Existing assistant-tag logic
+      const splitAnswer = answer.split("<|assistant|>");
+      if (splitAnswer.length > 1) {
+        answer = splitAnswer[1].trim();
+      }
+
+      // Remove stop tokens
+      answer = answer.replaceAll("</s>", "").trim();
+
+      // Remove unwanted continuation patterns
+      const stopPatterns = [
+        "User Question:",
+        "User:",
+        "Question:",
+        "### User",
+        "### Instruction"
+      ];
+
+      for (const pattern of stopPatterns) {
+        const idx = answer.indexOf(pattern);
+        if (idx !== -1) {
+          answer = answer.slice(0, idx).trim();
+        }
+      }
     }
-  }
 
     res.json({
       answer,
       context,
       sources,
     });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ answer: "Error: could not reach KalevalaGPT" });

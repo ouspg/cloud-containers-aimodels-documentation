@@ -26,15 +26,18 @@ Useful free developer tools and services for containers, cloud, and AI+ML, avail
 
 ## ⏳ Quickstart Guide
 
-Quickstart development with these steps to build, containerize, and deploy your own AI model using best practices. This guide is designed to be generalizable to similar cloud/container/AI projects using the mentioned technologies. **full-stack RAFT example included!**
+## ⏳ Quickstart Guide
 
+Want to skip the tutorials and get right into action? Quickstart development with these steps to build, containerize, and deploy your own AI RAG system using best practices. This guide provides a hands-on example and is designed to be generalizable to similar cloud/container/AI projects using the mentioned technologies.
+
+- Final Project Demo Video
+- 📝 Project Plan
 - Project layout and basic setup
 - Model development and exporting
 - Implementing RAFT API
 - Full-stack app development
-- Containerizing the API with Docker
+- Test the full app
 - Deploying the full-stack to Rahti (OpenShift)
-- Next steps
 
 > Jump to [`quickstart/`](quickstart/) to get started.
 

@@ -5,6 +5,8 @@ Quickstart development with these examples and tips to build, containerize, and 
 <details>
 <summary>📁 Navigation</summary>
 
+- [Final Project Demo Video](#final-project-demo-video)
+
 - [📝 Project Plan](#-project-plan)
 
 1.  [Project layout and basic setup](#1-project-layout-and-basic-setup)
@@ -15,13 +17,17 @@ Quickstart development with these examples and tips to build, containerize, and 
 
 4. [Full-stack app development](#4-full-stack-app-development)
 
-5. [Containerizing the API with Docker](#5-containerizing-the-api-with-docker)
+- [Test the full app](#test-the-full-app)
 
-6. [Deploying the full-stack to Rahti](#6-deploying-the-full-stack-to-rahti-openshift)
-
-7. [Next steps](#7-next-steps)
+5. [Deploying the full-stack to Rahti](#5-deploying-the-full-stack-to-rahti-openshift)
 
 </details>
+
+## Final Project Demo Video
+
+[![Demo video](https://img.youtube.com/vi/srWRFmdccy4/0.jpg)](https://youtu.be/srWRFmdccy4)
+
+
 
 ## 📝 Project Plan
 
@@ -357,13 +363,13 @@ Initialize a Node.js project in the backend folder:
 
 We are using Axios as it simplifies the HTTP requests using promises and error handling. Express.js is used as the backend framework because it is lightweight and easy to expand on. CORS is enabled to allow the React frontend (which is running on a different port) to communicate with the API.
 
-### Test the full app
+## Test the full app
 
-Go to the main folder, and install concurrently to test run both the backend and frontend simultaneously with ease:
+Download the KalevalaGPT dir contents, cd to the /app folder, and install concurrently to test run both the backend and frontend simultaneously with ease:
 
     npm install concurrently
 
-Then add these to the main project folder's `package.json`:
+Make sure the `package.json` contains these:
 
     {
     "name": "kalevalagpt",
@@ -376,17 +382,34 @@ Then add these to the main project folder's `package.json`:
     }
     }
 
-## 5. Containerizing the API with Docker
+### Containerizing the API with Docker
+First, make sure to navigate to quickstart/KalevalaGPT/ai-model and ensure Docker daemon is running with:
+    
+    sudo systemctl start docker
 
-Build the image with
+Then, build the image (this may take about 5-10 minutes depending on your setup and internet speeds):
 
-    docker build -t kalevalagpt-ai . 
+    docker build -t kalevalagpt-ai .
+
+> You may need to tweak the requirements.txt versions and contents depending on your setup specifications.  
 
 As the .env file is dockerignored, we need to add it into the run statement:
 
     docker run -d -p 8000:8000 --env-file .env kalevalagpt-ai 
 
-## 6. Deploying the full-stack to Rahti (OpenShift)
+You can test if the service is running correclty with checking the /health endpoint:
+
+    curl -H "X-API-Key: supersecretkey123" http://localhost:8000/health
+
+### Running the full-stack
+
+Head to quickstart/KalevalaGPT/app and run `npm i` in /app, app/frontend and app/backend, then back in /app:
+
+    npm run dev
+
+Then just click open http://localhost:8080/ to view the running app!
+
+## 5. Deploying the full-stack to Rahti (OpenShift)
 
 Deploying software from a GitHub repository to CSC Rahti
 
@@ -430,11 +453,4 @@ Remember to switch the frontend and backend urls from localhost to addresses fro
 
 > For more detailed instructions, visit https://docs.csc.fi/cloud/rahti/
 
-## 7. Next steps
-
-Frontend:
-
-- Learn how to use localStorage https://www.geeksforgeeks.org/javascript/javascript-localstorage/
-
-- Learn tailwind css https://tailwindcss.com/
 

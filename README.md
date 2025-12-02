@@ -26,8 +26,6 @@ Useful free developer tools and services for containers, cloud, and AI+ML, avail
 
 ## ⏳ Quickstart Guide
 
-## ⏳ Quickstart Guide
-
 Want to skip the tutorials and get right into action? Quickstart development with these steps to build, containerize, and deploy your own AI RAG system using best practices. This guide provides a hands-on example and is designed to be generalizable to similar cloud/container/AI projects using the mentioned technologies.
 
 - Final Project Demo Video

@@ -2,6 +2,8 @@
 
 Welcome! This project serves as a comprehensive, beginner-friendly guide for individuals or teams working with **cloud infrastructure**, **containerization**, and **AI model integration**. The aim of the document is to teach the basics of working with the technologies, and to provide practical workflows, examples, and best practices to help get started.
 
+<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/afc3f73c-1082-43ef-92d6-7c086789f545" />
+
 ### 📁 Navigation
 - [🎓 Free Dev Tools & Services for Students](#-free-dev-tools--services-for-students)
 - [⏳ Quickstart Guide](#-quickstart-guide)
